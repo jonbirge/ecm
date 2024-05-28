@@ -4,12 +4,15 @@
 #include <string.h>
 #include <getopt.h>
 #include "ecm.h"
+#include "../config.h"
 
-void print_usage(const char *prog_name) {
+void print_usage(const char *prog_name)
+{
     fprintf(stderr, "Usage: %s [--decode|-d] [--output|-o outputfile] [--verbose|-v] [--help|-h] [inputfile]\n", prog_name);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     FILE *input = stdin;
     FILE *output = stdout;
     int decode = 0;
@@ -19,7 +22,8 @@ int main(int argc, char *argv[]) {
 
     char *prog_name = strrchr(argv[0], '/');
     prog_name = prog_name ? prog_name + 1 : argv[0];
-    if (strcmp(prog_name, "unecm") == 0) {
+    if (strcmp(prog_name, "unecm") == 0)
+    {
         decode = 1;
     }
 
@@ -28,37 +32,45 @@ int main(int argc, char *argv[]) {
         {"output", required_argument, 0, 'o'},
         {"verbose", no_argument, 0, 'v'},
         {"help", no_argument, 0, 'h'},
-        {0, 0, 0, 0}
-    };
+        {"version", no_argument, 0, 'V'},
+        {0, 0, 0, 0}};
 
     int opt;
     int option_index = 0;
-    while ((opt = getopt_long(argc, argv, "dvo:h", long_options, &option_index)) != -1) {
-        switch (opt) {
-            case 'd':
-                decode = 1;
-                break;
-            case 'o':
-                output = fopen(optarg, "w");
-                if (output == NULL) {
-                    perror("fopen");
-                    exit(EXIT_FAILURE);
-                }
-                break;
-            case 'v':
-                verbose = 1;
-                break;
-            case 'h':
-            default:
-                print_usage(argv[0]);
+    while ((opt = getopt_long(argc, argv, "dvo:hV", long_options, &option_index)) != -1)
+    {
+        switch (opt)
+        {
+        case 'd':
+            decode = 1;
+            break;
+        case 'o':
+            output = fopen(optarg, "w");
+            if (output == NULL)
+            {
+                perror("fopen");
                 exit(EXIT_FAILURE);
+            }
+            break;
+        case 'v':
+            verbose = 1;
+            break;
+        case 'V':
+            printf("%s %s\n", prog_name, VERSION);
+            exit(EXIT_SUCCESS);
+        case 'h':
+        default:
+            print_usage(argv[0]);
+            exit(EXIT_FAILURE);
         }
     }
 
-    if (optind < argc) {
+    if (optind < argc)
+    {
         input_filename = argv[optind];
         input = fopen(input_filename, "r");
-        if (input == NULL) {
+        if (input == NULL)
+        {
             perror("fopen");
             exit(EXIT_FAILURE);
         }
@@ -66,14 +78,19 @@ int main(int argc, char *argv[]) {
 
     eccedc_init();
 
-    if (decode) {
+    if (decode)
+    {
         exit_code = decode_file(input, output, verbose);
-    } else {
+    }
+    else
+    {
         exit_code = encode_file(input, output, verbose);
     }
 
-    if (input != stdin) fclose(input);
-    if (output != stdout) fclose(output);
+    if (input != stdin)
+        fclose(input);
+    if (output != stdout)
+        fclose(output);
 
     return exit_code;
 }

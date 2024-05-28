@@ -1,6 +1,7 @@
 # Build files
 ecm
 unecm
+config.h
 *.o
 *~
 
