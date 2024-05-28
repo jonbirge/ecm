@@ -1,4 +1,4 @@
-AC_INIT([ecm], [1.0], [bugs@birge.us])
+AC_INIT([ecm], [1.0-dev], [bugs@birge.us])
 AM_INIT_AUTOMAKE([subdir-objects -Wall -Werror foreign])
 AC_PROG_CC
 AC_CHECK_LIB([m], [main], [], [AC_MSG_ERROR([libm is required])])
