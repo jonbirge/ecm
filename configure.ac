@@ -3,5 +3,5 @@ AM_INIT_AUTOMAKE([subdir-objects -Wall -Werror foreign])
 AC_PROG_CC
 AC_CHECK_LIB([m], [main], [], [AC_MSG_ERROR([libm is required])])
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([Makefile src/Makefile unecm])
+AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT

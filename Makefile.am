@@ -1,9 +1,10 @@
-AUTOMAKE_OPTIONS = foreign
 SUBDIRS = src
 
-bin_PROGRAMS = ecm
-ecm_SOURCES = src/ecm.c src/encode.c src/decode.c
-ecm_CFLAGS = -I$(top_srcdir)/include
+bin_SCRIPTS = unecm
+
+unecm: src/ecm
+	cat unecm.in > unecm
+	chmod a+x unecm
 
 EXTRA_DIST = unecm
 CLEANFILES = unecm
