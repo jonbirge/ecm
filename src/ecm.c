@@ -1,7 +1,12 @@
 #include "ecm.h"
 
+/* Globals */
+ecc_uint8 ecc_f_lut[256];
+ecc_uint8 ecc_b_lut[256];
+ecc_uint32 edc_lut[256];
+
 /* Init routine */
-static void eccedc_init(void)
+void eccedc_init(void)
 {
     ecc_uint32 i, j, edc;
     for (i = 0; i < 256; i++)

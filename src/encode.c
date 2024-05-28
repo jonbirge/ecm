@@ -295,6 +295,7 @@ unsigned in_flush(
     FILE *out,
     int verbose)
 {
+    size_t read_result;
     unsigned char buf[2352];
     write_type_count(out, type, count);
     if (!type)
@@ -304,7 +305,12 @@ unsigned in_flush(
             unsigned b = count;
             if (b > 2352)
                 b = 2352;
-            fread(buf, 1, b, in);
+            read_result = fread(buf, 1, b, in);
+            if (read_result != b)
+            {
+                fprintf(stderr, "Unexpected EOF\n");
+                exit(1);
+            }
             edc = edc_computeblock(edc, buf, b);
             fwrite(buf, 1, b, out);
             count -= b;
@@ -317,20 +323,35 @@ unsigned in_flush(
         switch (type)
         {
         case 1:
-            fread(buf, 1, 2352, in);
+            read_result = fread(buf, 1, 2352, in);
+            if (read_result != 2352)
+            {
+                fprintf(stderr, "Unexpected EOF\n");
+                exit(1);
+            }
             edc = edc_computeblock(edc, buf, 2352);
             fwrite(buf + 0x00C, 1, 0x003, out);
             fwrite(buf + 0x010, 1, 0x800, out);
             setcounter_encode(ftell(in), verbose);
             break;
         case 2:
-            fread(buf, 1, 2336, in);
+            read_result = fread(buf, 1, 2336, in);
+            if (read_result != 2336)
+            {
+                fprintf(stderr, "Unexpected EOF\n");
+                exit(1);
+            }
             edc = edc_computeblock(edc, buf, 2336);
             fwrite(buf + 0x004, 1, 0x804, out);
             setcounter_encode(ftell(in), verbose);
             break;
         case 3:
-            fread(buf, 1, 2336, in);
+            read_result = fread(buf, 1, 2336, in);
+            if (read_result != 2336)
+            {
+                fprintf(stderr, "Unexpected EOF\n");
+                exit(1);
+            }
             edc = edc_computeblock(edc, buf, 2336);
             fwrite(buf + 0x004, 1, 0x918, out);
             setcounter_encode(ftell(in), verbose);
@@ -351,6 +372,7 @@ int encode_file(FILE *in, FILE *out, int verbose)
     int curtypecount = 0;
     int curtype_in_start = 0;
     int detecttype;
+    size_t read_result;
     int incheckpos = 0;
     long inbufferpos = 0;
     long intotallength;
@@ -385,7 +407,12 @@ int encode_file(FILE *in, FILE *out, int verbose)
             {
                 setcounter_analyze(inbufferpos, verbose);
                 fseek(in, inbufferpos, SEEK_SET);
-                fread(inputqueue + 4 + dataavail, 1, willread, in);
+                read_result = fread(inputqueue + 4 + dataavail, 1, willread, in);
+                if (read_result != willread)
+                {
+                    fprintf(stderr, "Unexpected EOF\n");
+                    exit(1);
+                }
                 inbufferpos += willread;
                 dataavail += willread;
             }
@@ -461,7 +488,7 @@ int encode_file(FILE *in, FILE *out, int verbose)
         fprintf(stderr, "Mode 2 form 1 sectors... %10d\n", typetally[2]);
         fprintf(stderr, "Mode 2 form 2 sectors... %10d\n", typetally[3]);
         fprintf(stderr, "Encoded %ld bytes -> %ld bytes\n", intotallength, ftell(out));
-        fprintf(stderr, "Done.\n");
+        fprintf(stderr, "Done\n");
     }
     return 0;
 }

@@ -1,3 +1,5 @@
 - Fix decode bug!
 - Do we need math libary?
 - Some of the functions in encode.c and decode.c could be made common in ecm.c
+- Eliminate compilation warnings
+

@@ -9,12 +9,13 @@ typedef unsigned short ecc_uint16;
 typedef unsigned int ecc_uint32;
 
 /* LUTs used for computing ECC/EDC */
-static ecc_uint8 ecc_f_lut[256];
-static ecc_uint8 ecc_b_lut[256];
-static ecc_uint32 edc_lut[256];
+extern ecc_uint8 ecc_f_lut[];
+extern ecc_uint8 ecc_b_lut[];
+extern ecc_uint32 edc_lut[];
 
 /* Functions */
 void print_usage(const char *prog_name);
+void eccedc_init(void);
 int encode_file(FILE *in, FILE *out, int verbose);
 int decode_file(FILE *in, FILE *out, int verbose);
 

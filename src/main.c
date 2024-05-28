@@ -64,6 +64,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    eccedc_init();
+
     if (decode) {
         exit_code = decode_file(input, output, verbose);
     } else {
