@@ -1,3 +1,8 @@
+# Build files
+ecm
+*.o
+*~
+
 # http://www.gnu.org/software/automake
 
 Makefile.in

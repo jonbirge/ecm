@@ -1,0 +1,8 @@
+## Installation Instructions
+
+To install ECM, follow these steps:
+
+1. Run `autoreconf -i` to generate the configuration files.
+2. Run `./configure` to configure the project.
+3. Run `make` to build the project.
+4. Optionally, run `make install` to install the binaries.
