@@ -28,4 +28,23 @@ No. If the file isn't a sector-by-sector copy of an optical disk, it isn't a sta
 Nope. An ISO file already has the redundant ECC and other overhead removed and just represents the file system data itself, essentially achieving what this program provides on `.bin` files.
 
 ### If ISO files perform a similar function, what is the point of a BIN file?
-All I know is some emulators use them. I can only surmise that some older systems dealt with the raw data from an optical drive, and didn't have a driver to handle the error correction and translate into a proper file system, and thus the emulator must do the same.
+The choice between ISO and BIN/CUE files depends on the specific needs and the type of optical disc being imaged. Here’s a detailed comparison of why one might use BIN/CUE over ISO:
+#### ISO Files:
+- **Efficient and Simple**: ISO files provide an efficient and straightforward way to image data discs, capturing the entire filesystem and user data in a single file.
+- **Widespread Compatibility**: ISO files are widely supported by operating systems and software, making them easy to mount, extract, or burn.
+- **Use Case**: Ideal for standard data CDs, DVDs, and Blu-ray discs where the primary need is to replicate the filesystem and data content.
+#### BIN/CUE Files:
+- **Raw Sector Data**: BIN files capture a raw sector-by-sector copy of the disc, including all data from each sector. This can include additional information like subchannel data and possibly ECC, which is important for certain types of discs.
+- **Multiple Tracks and Sessions**: The CUE file provides a detailed description of the disc’s layout, including track boundaries, session information, and other structural details. This is particularly important for audio CDs, mixed-mode discs, and discs with special formats that ISO cannot fully encapsulate.
+- **Precision**: BIN/CUE files can precisely replicate the original disc’s structure, making them suitable for archival purposes and for creating exact duplicates of discs that have complex layouts or non-standard formats.
+- **Use Case**: Essential for audio CDs, mixed-mode CDs, discs with multiple sessions, or other special formats where capturing all low-level details of the disc is necessary.
+#### Key Reasons to Use BIN/CUE over ISO:
+1. **Multiple Tracks and Mixed Media**: Audio CDs and mixed-mode CDs often contain multiple tracks and require the detailed structural information that BIN/CUE provides.
+2. **Subchannel Data**: Certain types of discs, especially older formats, may rely on subchannel data for proper playback or functionality. BIN/CUE can capture this data, while ISO cannot.
+3. **Exact Duplication**: For archival purposes or when creating an exact duplicate of a disc with non-standard formatting, BIN/CUE is the preferred format due to its ability to replicate all aspects of the original disc.
+4. **Special Formats**: Some software, games, or multimedia discs use non-standard formats that require the detailed sector-level information captured by BIN/CUE.
+#### Summary:
+- **ISO**: Best for straightforward data disc imaging, providing simplicity, efficiency, and broad compatibility.
+- **BIN/CUE**: Best for complex disc formats requiring detailed replication of the disc’s structure and data, including multiple tracks, subchannel information, and special formats.
+
+The choice between the two formats depends on the specific requirements of the disc being imaged and the intended use of the image file.
