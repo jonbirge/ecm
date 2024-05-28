@@ -1,7 +1,6 @@
 /***************************************************************************/
 /*
-** UNECM - Decoder for ECM (Error Code Modeler) format.
-** Version 1.0
+** Decoder for ECM (Error Code Modeler) format.
 ** Copyright (C) 2002 Neill Corlett
 ** Copyright (C) 2024 Jonathan Birge
 **

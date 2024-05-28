@@ -1,7 +1,6 @@
 /***************************************************************************/
 /*
 ** ECM - Encoder for ECM (Error Code Modeler) format.
-** Version 1.0
 ** Copyright (C) 2002 Neill Corlett
 ** Copyright (C) 2024 Jonathan Birge
 **
@@ -420,13 +419,9 @@ int encode_file(FILE *in, FILE *out, int verbose)
         if (dataavail <= 0)
             break;
         if (dataavail < 2336)
-        {
             detecttype = 0;
-        }
         else
-        {
             detecttype = check_type(inputqueue + 4 + inqueuestart, dataavail >= 2352);
-        }
         if (detecttype != curtype)
         {
             if (curtypecount)
