@@ -1,7 +1,7 @@
 # ecm
 
 ## Overview
-This is a simple command-line tool adhering to GNU interface standards that implements Neill Corlett's Error Code Modeler (ECM) codec. The main use for this is decoding `.bin.ecm` files you may find on the internet, or, more rarely, creating them yourself. Such files arise usually in the context of CD-ROM files to be used with legacy system emulator software. A `.bin` file is a direct binary sector-by-sector copy of the raw data from a CD-ROM, which includes the error correction code (ECC). As such, there is significant useless redundant data that is both unneeded outside of the context of an optical disk as well as very hard to compress (as it is essentially random). The ECM codec removes this ECC data (as well as a few other bits of overhead), which not only shrinks the data a bit on its own, but more importantly makes it much more amenable to compression by other means. In the spirit of UNIX tools, this simple utility only handles the ECM algorithm, and is designed to be piped to another program that will handle the compression.
+This is a simple command-line tool that implements Neill Corlett's Error Code Modeler (ECM) codec. The main use for this is decoding `.ecm` files you may find on the internet, or, more rarely, creating them yourself. Such files arise in the context of CD-ROM files to be used with legacy system emulator software. A `.bin` file is a direct binary sector-by-sector copy of the raw data from a CD-ROM, which includes the error correction code (ECC). As such, there is significant useless redundant data that is both unneeded outside of the context of an optical disk as well as very hard to compress (as it is essentially random). The ECM codec removes this ECC data (as well as a few other bits of overhead), which not only shrinks the data a bit on its own, but more importantly makes it much more amenable to compression by other means. In the spirit of UNIX tools, this simple utility only handles the ECM algorithm, and is designed to be piped to another program that will handle the compression.
 
 The command line tool from Neill Corlett is very hard to find and no longer packaged by most Linux distributions, so I figured I'd spend a couple hours as make a nice GNU-compliant package of it all, and perhaps make it available as a snap.
 
@@ -28,7 +28,7 @@ No. If the file isn't a sector-by-sector copy of an optical disk, it isn't a sta
 Nope. An ISO file already has the redundant ECC and other overhead removed and just represents the file system data itself, essentially achieving what this program provides on `.bin` files.
 
 ### If ISO files perform a similar function, what is the point of a BIN file?
-The choice between ISO and BIN/CUE files depends on the specific needs and the type of optical disc being imaged. Here’s a detailed comparison of why one might use BIN/CUE over ISO:
+An ISO can lose information relevent to the CD-ROM, especially when the ECC has been tampered with for various reasons, or if the CD-ROM is multi-session. Here’s a detailed comparison of why one might use BIN/CUE over ISO:
 #### ISO Files:
 - **Efficient and Simple**: ISO files provide an efficient and straightforward way to image data discs, capturing the entire filesystem and user data in a single file.
 - **Widespread Compatibility**: ISO files are widely supported by operating systems and software, making them easy to mount, extract, or burn.
