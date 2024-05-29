@@ -20,20 +20,6 @@
 #include <string.h>
 #include "ecm.h"
 
-/***************************************************************************/
-/*
-** Compute EDC for a block
-*/
-ecc_uint32 edc_partial_computeblock(
-    ecc_uint32 edc,
-    const ecc_uint8 *src,
-    ecc_uint16 size)
-{
-    while (size--)
-        edc = (edc >> 8) ^ edc_lut[(edc ^ (*src++)) & 0xFF];
-    return edc;
-}
-
 void edc_computeblock_decode(
     const ecc_uint8 *src,
     ecc_uint16 size,
@@ -50,7 +36,7 @@ void edc_computeblock_decode(
 /*
 ** Compute ECC for a block (can do either P or Q)
 */
-static void ecc_computeblock_decode(
+void ecc_computeblock_decode(
     ecc_uint8 *src,
     ecc_uint32 major_count,
     ecc_uint32 minor_count,
@@ -76,6 +62,7 @@ static void ecc_computeblock_decode(
             ecc_a = ecc_f_lut[ecc_a];
         }
         ecc_a = ecc_b_lut[ecc_f_lut[ecc_a] ^ ecc_b];
+
         dest[major] = ecc_a;
         dest[major + major_count] = ecc_a ^ ecc_b;
     }
@@ -84,7 +71,7 @@ static void ecc_computeblock_decode(
 /*
 ** Generate ECC P and Q codes for a block
 */
-static void ecc_generate_decode(
+void ecc_generate_decode(
     ecc_uint8 *sector,
     int zeroaddress)
 {
@@ -275,7 +262,8 @@ int decode_file(FILE *in, FILE *out, int verbose)
         (sector[3] != ((checkedc >> 24) & 0xFF)))
     {
         if (verbose)
-            fprintf(stderr, "EDC error (%08X, should be %02X%02X%02X%02X)\n",
+            fprintf(stderr,
+                    "EDC error (%08X, should be %02X%02X%02X%02X)\n",
                     checkedc,
                     sector[3],
                     sector[2],

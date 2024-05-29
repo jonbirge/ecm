@@ -22,23 +22,9 @@
 
 /***************************************************************************/
 /*
-** Compute EDC for a block
-*/
-ecc_uint32 edc_computeblock(
-    ecc_uint32 edc,
-    const ecc_uint8 *src,
-    ecc_uint16 size)
-{
-    while (size--)
-        edc = (edc >> 8) ^ edc_lut[(edc ^ (*src++)) & 0xFF];
-    return edc;
-}
-
-/***************************************************************************/
-/*
 ** Compute ECC for a block (can do either P or Q)
 */
-static int ecc_computeblock(
+int ecc_computeblock_encode(
     ecc_uint8 *src,
     ecc_uint32 major_count,
     ecc_uint32 minor_count,
@@ -64,6 +50,7 @@ static int ecc_computeblock(
             ecc_a = ecc_f_lut[ecc_a];
         }
         ecc_a = ecc_b_lut[ecc_f_lut[ecc_a] ^ ecc_b];
+        
         if (dest[major] != (ecc_a))
             return 0;
         if (dest[major + major_count] != (ecc_a ^ ecc_b))
@@ -75,7 +62,7 @@ static int ecc_computeblock(
 /*
 ** Generate ECC P and Q codes for a block
 */
-static int ecc_generate(
+int ecc_generate_encode(
     ecc_uint8 *sector,
     int zeroaddress,
     ecc_uint8 *dest)
@@ -90,7 +77,7 @@ static int ecc_generate(
             sector[12 + i] = 0;
         }
     /* Compute ECC P code */
-    if (!(ecc_computeblock(sector + 0xC, 86, 24, 2, 86, dest + 0x81C - 0x81C)))
+    if (!(ecc_computeblock_encode(sector + 0xC, 86, 24, 2, 86, dest + 0x81C - 0x81C)))
     {
         if (zeroaddress)
             for (i = 0; i < 4; i++)
@@ -98,7 +85,7 @@ static int ecc_generate(
         return 0;
     }
     /* Compute ECC Q code */
-    r = ecc_computeblock(sector + 0xC, 52, 43, 86, 88, dest + 0x8C8 - 0x81C);
+    r = ecc_computeblock_encode(sector + 0xC, 52, 43, 86, 88, dest + 0x8C8 - 0x81C);
     /* Restore the address */
     if (zeroaddress)
         for (i = 0; i < 4; i++)
@@ -164,7 +151,7 @@ int check_type(unsigned char *sector, int canbetype1)
     }
 
     /* Check EDC */
-    myedc = edc_computeblock(0, sector, 0x808);
+    myedc = edc_partial_computeblock(0, sector, 0x808);
     if (canbetype2)
         if (
             (sector[0x808] != ((myedc >> 0) & 0xFF)) ||
@@ -174,7 +161,7 @@ int check_type(unsigned char *sector, int canbetype1)
         {
             canbetype2 = 0;
         }
-    myedc = edc_computeblock(myedc, sector + 0x808, 8);
+    myedc = edc_partial_computeblock(myedc, sector + 0x808, 8);
     if (canbetype1)
         if (
             (sector[0x810] != ((myedc >> 0) & 0xFF)) ||
@@ -184,7 +171,7 @@ int check_type(unsigned char *sector, int canbetype1)
         {
             canbetype1 = 0;
         }
-    myedc = edc_computeblock(myedc, sector + 0x810, 0x10C);
+    myedc = edc_partial_computeblock(myedc, sector + 0x810, 0x10C);
     if (canbetype3)
         if (
             (sector[0x91C] != ((myedc >> 0) & 0xFF)) ||
@@ -197,14 +184,14 @@ int check_type(unsigned char *sector, int canbetype1)
     /* Check ECC */
     if (canbetype1)
     {
-        if (!(ecc_generate(sector, 0, sector + 0x81C)))
+        if (!(ecc_generate_encode(sector, 0, sector + 0x81C)))
         {
             canbetype1 = 0;
         }
     }
     if (canbetype2)
     {
-        if (!(ecc_generate(sector - 0x10, 1, sector + 0x80C)))
+        if (!(ecc_generate_encode(sector - 0x10, 1, sector + 0x80C)))
         {
             canbetype2 = 0;
         }
@@ -310,7 +297,7 @@ unsigned in_flush(
                 fprintf(stderr, "Unexpected EOF\n");
                 exit(1);
             }
-            edc = edc_computeblock(edc, buf, b);
+            edc = edc_partial_computeblock(edc, buf, b);
             fwrite(buf, 1, b, out);
             count -= b;
             setcounter_encode(ftell(in), verbose);
@@ -328,7 +315,7 @@ unsigned in_flush(
                 fprintf(stderr, "Unexpected EOF\n");
                 exit(1);
             }
-            edc = edc_computeblock(edc, buf, 2352);
+            edc = edc_partial_computeblock(edc, buf, 2352);
             fwrite(buf + 0x00C, 1, 0x003, out);
             fwrite(buf + 0x010, 1, 0x800, out);
             setcounter_encode(ftell(in), verbose);
@@ -340,7 +327,7 @@ unsigned in_flush(
                 fprintf(stderr, "Unexpected EOF\n");
                 exit(1);
             }
-            edc = edc_computeblock(edc, buf, 2336);
+            edc = edc_partial_computeblock(edc, buf, 2336);
             fwrite(buf + 0x004, 1, 0x804, out);
             setcounter_encode(ftell(in), verbose);
             break;
@@ -351,7 +338,7 @@ unsigned in_flush(
                 fprintf(stderr, "Unexpected EOF\n");
                 exit(1);
             }
-            edc = edc_computeblock(edc, buf, 2336);
+            edc = edc_partial_computeblock(edc, buf, 2336);
             fwrite(buf + 0x004, 1, 0x918, out);
             setcounter_encode(ftell(in), verbose);
             break;

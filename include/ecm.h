@@ -16,6 +16,10 @@ extern ecc_uint32 edc_lut[];
 /* Functions */
 void print_usage(const char *prog_name);
 void eccedc_init(void);
+ecc_uint32 edc_partial_computeblock(
+    ecc_uint32 edc,
+    const ecc_uint8 *src,
+    ecc_uint16 size);
 int encode_file(FILE *in, FILE *out, int verbose);
 int decode_file(FILE *in, FILE *out, int verbose);
 
