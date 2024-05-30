@@ -1,0 +1,24 @@
+name: ecm-tools
+base: core22
+version: git
+summary: Command-line tools for Error Correction Model (ecm) files
+contact: bugs@birge.us
+source-code: https://github.com/jonbirge/ecm
+issues: https://github.com/jonbirge/ecm/issues
+description: |
+  Command-line tools for handling ecm files, which are used to allow efficient compression of CD-ROM images by omitting redundant data. This snap includes the ecm tool for encoding and decoding ecm files, as well as the cspeedtest tool for testing the speed of the curses library on your system.
+license: GPL-3.0
+grade: stable
+confinement: strict
+
+parts:
+  ecm:
+    source: https://github.com/jonbirge/ecm.git
+    plugin: autotools
+
+apps:
+  ecm:
+    command: usr/local/bin/ecm
+  unecm:
+    command: usr/local/bin/unecm
+
