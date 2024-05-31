@@ -4,6 +4,7 @@ unecm
 config.h
 *.o
 *~
+*.snap
 
 # http://www.gnu.org/software/automake
 
