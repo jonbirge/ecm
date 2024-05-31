@@ -1,6 +1,6 @@
 name: ecm-tools
 base: core22
-version: git
+version: 1.0
 summary: Command-line tools for Error Correction Model (ecm) files
 contact: bugs@birge.us
 source-code: https://github.com/jonbirge/ecm
@@ -13,7 +13,7 @@ confinement: strict
 
 parts:
   ecm:
-    source: https://github.com/jonbirge/ecm.git
+    source: .
     plugin: autotools
 
 apps:
@@ -21,4 +21,3 @@ apps:
     command: usr/local/bin/ecm
   unecm:
     command: usr/local/bin/unecm
-

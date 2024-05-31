@@ -7,4 +7,4 @@ unecm: src/ecm
 	chmod a+x unecm
 
 EXTRA_DIST = unecm.in
-CLEANFILES = unecm
+CLEANFILES = unecm *.snap
