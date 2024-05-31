@@ -2,7 +2,6 @@ AC_INIT([ecm], [1.0], [bugs@birge.us])
 AM_INIT_AUTOMAKE([subdir-objects -Wall -Werror foreign])
 AC_CONFIG_SRCDIR([src/ecm.c])
 AC_CONFIG_HEADERS([config.h])
-AC_ARG_VAR([CFLAGS], [-O3 -march=native])
 AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
