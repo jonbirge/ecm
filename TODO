@@ -1,3 +1,2 @@
-- Some of the functions in encode.c and decode.c could be made common in ecm.c
+- Fix unecm script (when installed in snap)
 - Add man pages
-
